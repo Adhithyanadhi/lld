@@ -1,0 +1,201 @@
+music-player
+
+functional-requirements:-
+    - search for songs
+    - play selected song
+    - move to next/previous/shuffle song
+    - create playlist
+    - play playlist
+    - suggest next song
+    - add a song to fav/playlist
+
+questions:-
+    - walkthrough shuffle how is it handled?
+
+user
+    - user_id
+    - name
+    - email
+    - password_hash
+
+
+song
+    - song_id
+    - name
+    - s3_url
+    - duration
+    - language
+    - genre
+    - meta_data
+
+    + upload_song()
+    + play_a_song(song_id)
+    + like_a_song(user_id, song_id)
+    + search_songs(query)
+    + add_song_to_q()
+
+PlaySongService
+    + play_next_song_from_playlist(play_list)
+    + play_random_song_from_playlist(play_list)
+
+playlist
+    - playlist_id
+    - user_id
+    - type(private, public)
+    - []song_ids
+
+    -- default fav playlist
+    + create_playlist(play_list, user)
+    + add_song_to_playlist(play_list, song_id)
+    + remove_song_from_playlist(play_list, song_id)
+
+music_player_context
+    - user_id
+    - previous_song_list []song_id
+    - queue []song_id (in-memory)
+    - current_song_id
+    - current_playlist_id
+
+    + play_next_song
+    + play_previous_song
+    + shuffle_song
+
+recommendation_service
+    + play_next_song(user_id, current_song_id)
+
+listening_stats
+    - user_id
+    - song_id
+    - play_count
+    - last_played_i
+
+
+shuffle_context
+    - play_list_id
+    - previous_song_list []song_id
+    - next_song_list []song_id
+    - current_song_id
+
+
+
+🔹 Functional Understanding
+How does the user play a song? Walk me through the flow.
+    - when user first login, the song will be played from the recommendation_service
+    - if logged in already, current_song_id will be used 
+    - or user can choose any song from the list, which triggers play_a_song(song_id)
+
+How is a playlist created and managed?
+    - playlist is created based on subscription type
+    - default mode is private
+    - play_list.create_playlist({play_list_data})
+    - play_list.add_song_to_playlist(song_id)
+    - play_list.remove_song_from_playlist(song_id)
+
+What happens when the user hits shuffle?
+    - shuffle_context is created with all song_ids queued from the current_playlist_id 
+    - if shuffle is not within a play_list, recommendation_service will play_next_song which has not played before in that session
+    - clicking on previous and next during shuffle will fetch a random song from corresponding list in shuffle_context
+    - new songs added during shuffle will get addeded to the next_song_list
+    - once next_song_list is empty, previous_song_list is moved to the next_song_list
+
+How do you support next/previous song functionality?
+    - using music_player_context.previous_song_list, previous song can be played
+    - if queue has songs, it wil be played next
+    - else next song from the current_playlist_id will be played in sequential order
+    - once current_playlist_id is completed, set the current_song_id = 0
+    - if not in play_list, (i.e,) next song is played from recommendation_service
+
+
+How does the suggestion/recommendation system decide what to play next?
+    - based on user listening_stats, determine the genre, author, trending and all other factors 
+
+How does the user’s play history affect future suggestions?
+    - recommendation_service uses users listening_stats for suggestion using the songs meta_data
+
+🔹 Design Decisions
+Why did you introduce music_player_context instead of handling state inside the player itself?
+    - music_player_context is my player, if user logs in with a different device, he should be able to resume
+
+Why is like_a_song inside song and not in a separate service?
+    - like_a_song is a operation owned by play_list (where the song gets added to the fav)
+    - I'm calling add_song_to_playlist(play_list: ‘Favorites’) inside like_a_song
+    - it can be a separate service as well, but it doesn't have any other operation than this, so why create new services?
+    - ideally it should be service, since it speaks with 2 entities song and playlist
+
+Why is s3_url directly in the song model — is that scalable?
+    - it is scalable, anyways it will be of type text
+    - unsure why it wont be scalable, since we store passage of contents in text 
+
+How would you implement the default ‘Favorites’ playlist?
+    - when a user is created, default ‘Favorites’ playlist will be created by a after_commit hook
+
+What’s the difference between queue and playlist in your design?
+    - play_list is stored in db, behaves the same across session
+    - queue is in-memory and will not be maintained across session
+
+🔹 Scalability & Architecture
+How would this design work for millions of users playing songs concurrently?
+    - the song is first fetched from s3 and cached in CDN 
+    - since the file_size is not huge scaling shouldn't be an issue
+    - celebrity_problem is addressed via caching
+
+How would you design this to support offline mode or caching?
+    - updates in offline mode are queued and sent to the server once the device is online
+    - caching recently played song with a default burst-time of 30 mins
+    - help me understand how caching will be helpful in this usecase --> no-idea
+
+How can the same song be played across multiple devices (multi-session sync)?
+    - since the songs are played via a PlayService, it will handle the multi-session sync
+    - play_next_song will be from db hence it will be in-order across devices
+
+Where would you introduce microservices boundaries?
+    - upload_song should be a separate service
+    - recommendation system should be a separate service
+    - music_player will be the main service
+
+How would you scale the recommendation_service?
+    - recommendation_service will be runnning for each user
+    - it will consider user subscription for frequency of upating the recommendation
+    - as the songs scales, the number_of_songs will have no effect on the recommendation service, as we have take previous n listening_stats
+    - as the user scales, we may have horizontally scale the service
+
+🔹 Database & Storage
+How would you model song metadata and search indexing (genre, language, artist)?
+    - song_metadata: song_id, author, duration, genre, language, album, published_date, lyrics_url, singer_details, song_writer_details
+    - for searching, build a elasticsearch as the search should be realtime, for fast search queries
+
+How would you handle storing and querying playlists with thousands of songs?
+    - we can use the same elasticsearch play_list_index, for playlist with play_list_id and data for searching
+    - we can split the play_list across indexes
+    - we can group a set of play_list to a single index
+    - store these info in a separate datastore
+    - we can search that particular index with play_list_id and search query
+    - this will make the search faster
+
+Would you denormalize listening_stats for fast reporting?
+
+How do you store song audio files? Any CDN strategy?
+
+How would you handle duplicate songs across different albums or artists?
+
+🔹 System Behavior / Edge Cases
+What if a song in a playlist is deleted?
+
+What if a song is removed from the queue mid-playback?
+
+What happens if the user skips too many songs in shuffle mode?
+
+What happens if two users edit the same playlist at the same time?
+
+How do you avoid suggesting the same song again and again?
+
+🔹 Advanced / Open-ended
+How would you implement collaborative playlists (multiple users editing)?
+
+How would you track real-time listening trends (top songs globally)?
+
+How would you handle DRM or subscription-based streaming?
+
+How do you deal with latency when a song starts playing?
+
+How would you build a smart shuffle that avoids repeating similar songs?

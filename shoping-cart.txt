@@ -1,0 +1,99 @@
+    e-commerce
+
+    functional-requirements:-
+        - list products
+        - add product
+        - update product qty in cart
+        - remove product from cart
+        - delete cart
+        - check-out cart
+        - inventory
+
+        TBD
+        - billing TBD
+
+
+    user
+        - user_id
+        - name
+        - email
+        - password_hash
+
+    product
+        - product_id
+        - seller_id
+        - name
+        - image
+        - desc
+        - price
+        - qty
+
+        + get_all_products()
+        + check_product_availability(product)
+        + update_product_qty(product, qty)
+        + search_products(query)
+
+
+    cart
+        - cart_id
+        - user_id
+        - status
+        - total
+
+        + recalculate_total(cart_id)
+        + add_product_to_cart(cart_id, product_id, user_id)
+        + delete_cart(cart)
+
+
+    cart-items
+        - cart_item_id
+        - cart_id
+        - qty
+        - product_id
+
+        + update_cart_item(cart_item)
+        + delete_cart_item(cart_item_id)
+
+
+    order
+        - order_id
+        - cart_id
+        - discount
+        - total_price
+        - status(pending, completed)
+
+
+    OrderService
+        + place_order([]cart_items) (on checkout)
+    
+    PaymentService
+        + process_payment()
+
+
+
+    order_item
+        - order_id
+        - product_id
+        - order_price
+        - status(shipped, out_for_delivery, delivered, returned, refund_completed)
+
+        + update_order_item_status(order_item)    
+
+    payment
+        - payment_id
+        - amount
+        - mode_of_payment
+        - order_id
+        - status
+        
+
+
+
+
+
+
+
+
+
+
+
