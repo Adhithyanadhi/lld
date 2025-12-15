@@ -1,0 +1,140 @@
+video streaming streaming(Amazon Prime) - lld
+
+
+functional-requirements
+
+    1. search for vidoes
+    2. recommend vidoes for user
+    3. play video -> (quality)
+    4. upload video -> (checks, DRM)
+    5. like, comment, rating
+    6. user, user subscription
+    7. watch-list -> add, delete
+    8. prev/next
+
+services:-
+    video_streaming_service, video_upload_service, recommendation_service
+
+db:-
+    elastic_search,
+    mysql
+
+problems:-
+    - celebrity_problem
+    
+Entities:-
+    user, series, seasons, video, video_metadata, watch_list, subscription, comment, watching_history
+
+user   
+    - user_id
+    - name
+    - email
+    - password_hash
+
+    + login
+    + logout
+    + signup
+
+subscription (plan)
+    - subcription_id
+    - type (silver, gold, diamond)
+    - fee
+    - time_period
+    - number_of_devices
+
+    + CRUD
+
+watchlist_entity
+    - watchlist_entity_id
+    - entity_type
+    - entity_id
+
+watchlist
+    - watchlist_id
+    - user_id
+    - watchlist_entity_id
+
+    + CRUD
+
+user_subscription
+    - user_id
+    - subscription_id
+    - subscribed_on_i
+    - expiry_date_i
+
+    + subscribe_user(user_id, subscription_id)
+    + unsubscribe_user(user_id, subscription_id)
+    + upgrade_user_subscription(user_id, subscription_id)
+
+video
+    - video_id
+    - s3_url
+    - min_subscription_level(none, silver, gold, diamond)
+    - author_id
+    - duration
+    - rating
+    - type (web_series, movie)
+
+    + add_video(video_data) -> create_video_metadata
+    + delete_video(video_id, user_id)
+    + edit_video(video_id, user_id)
+
+video_metadata
+    - available_resolutions []int
+    - most_replayed []float
+    - description
+    - season_id
+
+    + create_video_metadata
+
+player_context
+    - history []video_id
+    - current_video_id
+    - current_watchlist_id
+    - user_id
+
+    + play_previous(current_video_id)
+    + play_next(current_video_id, current_watchlist_id = 0)
+
+RatingService
+    + rate_a_series(user_id, entity_id, entity_type, rating)
+
+series_rating
+    - series_id
+    - rating
+    - user_id
+
+series
+    - series_id
+    - series_name
+    - series_metadata
+    - num_of_season
+    - rating
+
+season_rating
+    - season_id
+    - rating
+    - user_id
+
+season
+    - season_id
+    - season_number
+    - season_name
+    - season_metadata
+    - series_id
+    - num_of_episodes
+    - rating
+
+watch_history
+    - watch_history_id
+    - video_id
+    - user_id
+    - last_played_it
+
+
+comment
+    - comment_id
+    - content
+    - user_id
+    - parent_comment_id
+    

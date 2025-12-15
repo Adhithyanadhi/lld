@@ -1,0 +1,19 @@
+functional-requirements:
+  - upload, downlooad, share a file
+
+non-functional-requiremnets:
+  - highly scalable
+  - highly available
+  - minimum latency
+
+components:
+  - api-gateway (authentication, rate-limitting)
+  - load-balancer
+  - user-role-management
+  - upload-service
+  - download-service
+  - control-plane
+  - data-center-service -> maintaining data center location, available space
+  - allocation-service -> maintain geohash in-memory, give the closest data-center
+
+

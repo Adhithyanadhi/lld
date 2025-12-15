@@ -1,0 +1,41 @@
+functional requirements
+- authentication
+- rate limiting
+- reverse proxy (does api gateway act as proxy, typically?)
+- load balance
+- service discovery (I would say redirect to the matching url)
+
+non-functional requirements
+- high availability
+- low latency
+- scalable
+- handle spikes
+- 100M read/day -> 1000 rps
+- 100 write/day -> eventual consistency (we can provide immediate consistency as well since the number is low)
+
+services
+- load-balancer
+- broker; push new registration
+- api-registration-service; mysql (since only 100 RPS); publish via kafka-producer
+- gateway-service; 
+    1. reads mysql with pattern and service mapping; persistent
+    2. reads from DB and update trie for prefix service-base-url match; download/load-from-redis and deserialize trie in-memory and hot load cache on startup 
+    3. kafka-consumer updates the trie in gateway-service
+    4. periodically serialize trie and push it s3/redis
+- authentication-service; JWT authentication; redis cache; use user-info for rate-limiting(basically user_id/user_email)
+- rate-limiter; depends on cache heavily since this is only a temporary data; we can have a TTL of 1 day; increment atomically; key: rate:user_id:api_key:
+- user-management; only to pull user info for authentication 
+
+
+data-flow
+- service-registration/modification
+    1. user logs in post authentication; token stored in cache
+    2. request /post to register a service-base-url:service mapping
+    3. service-base-url stored in db
+
+- api-request
+    1. user request for /resource post authentication
+    2. gateway-service-slave receives te request from LB
+    3. translates url to service-base-url
+    3. check for service-base-url:service mapping in url:service cache if cache-miss pull from DB
+

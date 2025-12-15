@@ -1,0 +1,48 @@
+functional-requirements:
+  - manage delivery trucks & drivers
+  - real-time delivery status
+  - real-time delivery truck location tracking
+  - route optimization
+  - maintenance scheduling (what is considered as maintenance here)
+
+non-functional-requirements:
+  - availability > consistency 
+  - highly-available
+  - scalable
+  - low-latency
+  - fault-tolerance
+  - 1M delivery per day -> 10^6/day -> 10 delivery/sec
+  - track truck for 1 day post out-for-delivery -> 10^6 live tracking/10 sec -> 10^5 tracking records/sec, move snapshot to s3 for cold storage
+
+components:
+  - fleet-management
+  - SSE
+  - delivery-matching-service
+
+services:
+  - fleet-management
+    - driver and fleet management
+    - mysql db
+  - fleet-tracking-service
+    - /fleet/id timestamp, location
+    - update write-behind caching fleet_id:fleet_details for live tracking
+    - batch and update cassandra
+    - push snapshot to s3 for cold storage
+  - delivery-matching-service
+    - runs periodical jobs
+    - driven by pincode or location-based (geohash)
+    - accomodate max deliveries to a fleet by space and time
+    - use MST to find the minimum cost to deliver all items
+    - maintain delivery life-cycle (cancel, retry, reschedule)
+  - delivery-service
+    - open SSE connection with user and send periodic updates (when being tracked by user)
+    - use mongoDB for storing delivery details
+    - use read-through caching delivery_id:delivery_details
+  - notification-service 
+    - third-party integration
+
+qustions:
+  - "How do you handle re-optimization when a new high-priority delivery appears mid-route? Does the driver get re-routed instantly?":
+    - for simplicity we can assume, no re-routing once assigned
+    - delivery-matching service will update the delivery agent if needed (re-routing)
+  - "How do you scale SSE to millions of concurrent users?"

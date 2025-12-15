@@ -1,0 +1,13 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" version="27.0.2">
+  <diagram name="Page-1" id="9Sl30Htf9XaGOcII-bU0">
+    <mxGraphModel dx="1968" dy="1698" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="iAWBGlq2ZQNlUDTv57sW-1" value="design a logging system&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;functional requirements&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;div&gt;- maintain the order (store it with timestamp)&lt;/div&gt;&lt;div&gt;- services push logs&lt;/div&gt;&lt;/div&gt;&lt;div&gt;- fetch &amp;amp; log messages&lt;/div&gt;&lt;div&gt;- search or filter logs&amp;nbsp;&lt;/div&gt;&lt;div&gt;- queuing messages&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;non-functional requirements&lt;/div&gt;&lt;div&gt;- high available &amp;gt; consistency (a node can go down, but still capture the logs)&lt;/div&gt;&lt;div&gt;- partition tolerance (write-throughout) -&amp;gt; cassandra(hot storage), quickwit(cold storage)&lt;/div&gt;&lt;div&gt;- highly scalable&amp;nbsp;&lt;/div&gt;&lt;div&gt;- message scale -&amp;gt; 100M logs/day =&amp;gt; 10^8/day =&amp;gt; 10^5/sec&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;components&lt;/div&gt;&lt;div&gt;- logging-system&lt;/div&gt;&lt;div&gt;-&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;data-flow&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="-132" width="490" height="390" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

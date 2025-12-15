@@ -1,0 +1,28 @@
+given:
+    - Multiple users can edit the same document simultaneously.
+    - All users should see changes in near real-time (within 1 second).
+    - The system must support conflict resolution and offline editing (sync when online).
+    - Scale: 
+      - 10M monthly active users, 1M documents, 50k concurrent editors.
+
+functional-requirements:
+  - user editing doc simultaneously
+  - conflict resolution
+  - 
+
+non-functional-requirements:
+  - high-throughput
+  - scalable
+  - low latency (real-time)
+
+services:
+  - conflict-resolution-service (runs on OT or CRDT, idk how they resolve conflict, but they can be used)
+
+editor-service:
+  - 50k concurrent editors -> heavy write and we need real-time change reflection, so redis cluster with doc-id for sharding
+  - DB: cassandra (storing docs and edits)
+  - cache: redis-cluster 
+
+
+communication protocol for editing and syncing - web-socket
+

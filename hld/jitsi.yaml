@@ -1,0 +1,10 @@
+server(host)
+  - sender
+  - receiver
+
+clients
+  - sender
+  - receiver
+
+
+over: UDP

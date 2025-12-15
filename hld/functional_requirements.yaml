@@ -1,0 +1,8 @@
+functional requirements
+  - distribute load across nodes
+  - health check
+  
+non-functional requirements
+  - High availability
+  - hot backup if LB goes down
+

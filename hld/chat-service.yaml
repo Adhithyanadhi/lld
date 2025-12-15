@@ -1,0 +1,87 @@
+requirement:-
+build a chat service like whatsapp
+
+functional-requirement:-
+- 1-1 messaging
+- 1-M messaging
+- M-M messaging
+- maintain the messaging order 
+- list the chats based on recent first
+- forward messages
+- frequently messaged/forwarded
+- block chat
+- delete chat/message
+- edit message
+- archive chat
+- disappearing messages
+- message seen
+- pagination
+- reply to
+
+out of scope:-
+- media
+- status/post/poll
+- user-management
+- user-last-seen
+- audit tables
+- search in/across chat
+- notifications
+
+entities:-
+user, chat, message
+
+user:-
+- id
+- name
+- phone-number
+
+chat:-
+- id
+- type (group, 1-1)
+
+user_chat:-
+- id
+- chat_id
+- user_id
+
+message:-
+- id
+- sender_chat_id (user_chat_id)
+- content
+- order_no
+- status('', 'deleted', 'forwarded', 'old_edited', 'new_edited')
+- reply_to_message_id
+- deleted_setbit 
+- created_at
+
+user_chat_message_data:-
+- user_chat_id
+- starting_message_id
+- last_seen_message_id
+- is_blocked
+- is_archived
+
+message_exceptions:-
+- user_chat_id
+- message_id
+- status('', 'deleted-for-me', 'starred')
+
+user_network:-
+- id
+- primary_user_id
+- user_id
+- number_of_messages
+
+
+open-questions:-
+1. what is the cost of joins
+2. how order_no is assigned, how reliable, trusting receied time or sent time?
+3. how delete for me is handled?
+4. separate job to update the number of messages for user X with Y and Y with X
+5. how do you handle frequently forwarded/contacted for all users in large scale? - (on demand query, can cache based on user activity)
+6. disappearing messages should be a separate cron to update the user_chat_message_data.starting_message_id
+
+
+
+
+

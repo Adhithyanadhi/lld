@@ -1,0 +1,54 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" version="27.0.5">
+  <diagram name="Page-1" id="b3LOJnNgV-ZCHmipEFhy">
+    <mxGraphModel dx="1753" dy="1510" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-1" value="log messages in order&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Functional requirements&lt;/div&gt;&lt;div&gt;--------------------------------&lt;/div&gt;&lt;div&gt;- logs messages from diff services, to a file&lt;/div&gt;&lt;div&gt;- ordering maintained&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Non-functional&lt;/div&gt;&lt;div&gt;--------------------&lt;/div&gt;&lt;div&gt;- huge number logs per second&lt;/div&gt;&lt;div&gt;- highly available &amp;gt; consistency&lt;/div&gt;&lt;div&gt;- scalable&lt;/div&gt;&lt;div&gt;- 1000 services -&amp;gt; 10 logs/sec =&amp;gt; 10^5/sec&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;components&lt;/div&gt;&lt;div&gt;- emitters (schema -&amp;gt; timestamp)&amp;nbsp;&lt;/div&gt;&lt;div&gt;- load_balancer&lt;/div&gt;&lt;div&gt;- log_service(service_id =&amp;gt; partition_id )&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-45" y="-152" width="250" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="LyrkYjyruChXMP3Yw4C5-2" target="LyrkYjyruChXMP3Yw4C5-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-2" value="log-service&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-3" value="message Q" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.direct_data;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="640" y="10" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-5" value="consumers" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="790" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="LyrkYjyruChXMP3Yw4C5-6" target="LyrkYjyruChXMP3Yw4C5-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-6" value="consumers" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.004;entryY=0.657;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="LyrkYjyruChXMP3Yw4C5-3" target="LyrkYjyruChXMP3Yw4C5-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-8" value="cassandra" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="10" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="LyrkYjyruChXMP3Yw4C5-10" target="LyrkYjyruChXMP3Yw4C5-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-18" value="/post {message, service_id}" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="LyrkYjyruChXMP3Yw4C5-11">
+          <mxGeometry x="0.0612" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-10" value="emitters" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="LyrkYjyruChXMP3Yw4C5-12" target="LyrkYjyruChXMP3Yw4C5-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LyrkYjyruChXMP3Yw4C5-12" value="control-plane&lt;div&gt;- NTP synced&lt;/div&gt;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
