@@ -1,0 +1,19 @@
+what is mvcc?
+    multi-version-concurrency-control
+    used for maintaining multiple versions such that write are not blocked by the the reads
+    mysql and postgres implements it differently
+    postgres-mvcc writes the entire row again everytime when there is an update and when HOT is not applicable
+    mysql-mvcc applies only the delta (needs readup)
+
+what is index?
+    Index are b-tree datastructure with key-value as node-value where key is the key defined in the table schema
+    a table can have multiple indices
+    in mysql each secondary-index points to the primary-index
+    in postgres each index points to the ctid(page, offset) physical memory on disk (ctid = current tuple identifier)
+
+    updating a row in postgres, writes a new record on the disk hence all the index for that table has to be updated with the new ctid
+    updating a row in mysql, updates the record in-memory or not based on mysql-mvcc, but only the primary index has to be updated for the new-memory location change, not all the indices in that table is touched
+
+    hence for write/update heavy workload, prefer mysql innodb rather than postgres
+
+reference: https://www.cs.cmu.edu/~pavlo/blog/2023/04/the-part-of-postgresql-we-hate-the-most.html, https://www.uber.com/en-IN/blog/postgres-to-mysql-migration/
