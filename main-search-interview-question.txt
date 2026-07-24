@@ -1,0 +1,9 @@
+what is the complex problem that you have solved, recently?
+1) solved email search on attachments for large-scale email search system, by implementing a layer on tantivy for partitioning the data based on 2Dimensions (user-group and time)
+2) designing search on mutable data by moving the mutable fields to a child doc - small change but huge impact
+3) solved mailing list 
+
+Why is it complex?
+1) because of the components involved in email search system and the amount of data it should handle
+2) exploring variety of options to pin down the exact tool that matches our scenario 
+3) benchmarking each options to finalize the tool
